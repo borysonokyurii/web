@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+.streamlit/config.toml
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
