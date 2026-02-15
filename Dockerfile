@@ -1,15 +1,33 @@
-FROM python:3.12.12 AS builder
+FROM python:3.12-slim
 
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app
 
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    API_URL="http://localhost:8000" \
+    STREAMLIT_SERVER_PORT=8501 \
+    STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
+    STREAMLIT_SERVER_HEADLESS=true \
+    STREAMLIT_SERVER_ENABLE_CORS=false \
+    STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=false
 
-RUN python -m venv .venv
-COPY requirements.txt ./
-RUN .venv/bin/pip install -r requirements.txt
-FROM python:3.12.12-slim
-WORKDIR /app
-COPY --from=builder /app/.venv .venv/
-COPY . .
-CMD ["/app/.venv/bin/fastapi", "run"]
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy code
+COPY backend ./backend
+COPY frontend ./frontend
+COPY start.sh .
+
+# Make start script executable
+RUN chmod +x start.sh
+
+# Expose ports (Fly.io typically only exposes one public port, but we might need to proxy or run on different ports if using a custom config)
+# Standard Fly setup maps 80/443 to internal_port in fly.toml. 
+# Since we have two services, properly we should use a reverse proxy like Nginx or Traefik, 
+# or use Streamlit as the main entrypoint and have it talk to localhost backend.
+# For simplicity in this pet project, we run both. Fly will healthcheck one.
+EXPOSE 8000 8501
+
+CMD ["./start.sh"]

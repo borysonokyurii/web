@@ -7,18 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 from contextlib import asynccontextmanager
-from database import get_db
+from backend.database import get_db, engine
 
 load_dotenv()
 
-db_user = os.getenv('DB_USER')
-db_password = os.getenv('DB_PASSWORD')
-db_host = os.getenv('DB_HOST')
-db_port = os.getenv('DB_PORT')
-db_name = os.getenv('DB_NAME')
-
-DB_URL = f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}'
-engine = create_engine(DB_URL)
+# DATABASE_URL setup removed as it is handled in database.py
 
 def get_query():
     return text("""
@@ -35,10 +28,11 @@ def get_query():
     """)
 
 def get_second_query():
+    # optimized query to reduce load
     return text("""WITH cte AS (
     SELECT 
     s.seller_city, s.seller_state,
-    COUNT(DISTINCT o.order_id) AS "total", 
+    COUNT(o.order_id) AS "total", 
     SUM(CASE WHEN o.order_estimated_delivery_date < o.order_delivered_customer_date THEN 1 
     ELSE 0 END) AS "late_orders",
     ROUND(AVG(p.product_weight_g)::numeric, 2) AS "avg_weight_per_order"
@@ -59,11 +53,19 @@ def get_second_query():
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
-    with engine.connect() as con:
-        con.execute(text("SELECT 1"))
-    yield 
-    engine.dispose() 
-    print("зєднання закрито")
+    if engine:
+        try:
+            with engine.connect() as con:
+                con.execute(text("SELECT 1"))
+            yield 
+            engine.dispose() 
+            print("зєднання закрито")
+        except Exception as e:
+            print(f"Database connection failed: {e}")
+            yield
+    else:
+        print("Engine not initialized")
+        yield
 
 app = FastAPI(title="Olist Analytics API", lifespan=lifespan)
 

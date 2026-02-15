@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
 from fastapi.testclient import TestClient
-from main import app 
-from database import get_db
+from backend.main import app 
+from backend.database import get_db
 
 client = TestClient(app)
 
