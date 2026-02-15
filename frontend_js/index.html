@@ -154,20 +154,47 @@
                     </div>
 
                     <!-- Section 4 -->
-                    <section>
-                        <h3>Recommendations</h3>
-                        <ol>
-                            <li><strong>Dynamic delivery times:</strong> Implement an algorithm that automatically adds
-                                +1-2
-                                days to the expected delivery date for goods weighing more than <strong>10 kg</strong>
-                            </li>
-                            <li><strong>Optimize partnerships:</strong> Review logistics partners in cities with a
-                                Delay_Rate > 15% to identify the causes of delays</li>
-                            <li><strong>Manage expectations:</strong> Warn customers about possible delays for large
-                                items
-                                at the checkout stage</li>
-                        </ol>
-                    </section>
+                    <!-- Section 4 (Button only) -->
+                    <div style="grid-column: 1 / -1; text-align: center; margin-top: 2rem;">
+                        <button id="go-to-recommendations" class="btn-primary"
+                            style="padding: 1rem 2rem; font-size: 1.2rem;">View Strategic Recommendations
+                            &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations Section (Page 3) -->
+            <div id="recommendations-section" class="section hidden">
+                <button id="back-to-results" class="btn-secondary" style="margin-bottom: 2rem;">&larr; Back to
+                    Results</button>
+                <h2 style="text-align: center; margin-bottom: 3rem;">Strategic Recommendations</h2>
+
+                <div class="recommendations-container">
+                    <!-- Card 1 -->
+                    <div class="recommendation-card">
+                        <div class="card-icon">🚀</div>
+                        <h3>Dynamic Delivery Times</h3>
+                        <p>Implement an algorithm that automatically adds <strong>+1-2 days</strong> to expected
+                            delivery for
+                            goods > 10kg, managing customer expectations realistically.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="recommendation-card">
+                        <div class="card-icon">🤝</div>
+                        <h3>Optimize Partnerships</h3>
+                        <p>Review logistics partners in cities with <strong>Delay rate > 15%</strong> (e.g., Sombrio).
+                            Identify
+                            bottlenecks or switch providers in high-risk zones.</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="recommendation-card">
+                        <div class="card-icon">📢</div>
+                        <h3>Manage Expectations</h3>
+                        <p>Warn customers about potential delays for large items at the <strong>checkout stage</strong>.
+                            Transparency reduces negative reviews even if delays occur.</p>
+                    </div>
                 </div>
             </div>
         </main>

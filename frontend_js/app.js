@@ -7,8 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const projectSection = document.getElementById('project-section');
     const resultsSection = document.getElementById('results-section');
+    const recommendationsSection = document.getElementById('recommendations-section'); // New
     const goToResultsBtn = document.getElementById('go-to-results');
     const backToProjectBtn = document.getElementById('back-to-project');
+    const goToRecommendationsBtn = document.getElementById('go-to-recommendations'); // New
+    const backToResultsBtn = document.getElementById('back-to-results'); // New
     const apiStatus = document.getElementById('api-status');
     const refreshBtn = document.getElementById('refresh-btn');
 
@@ -164,6 +167,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 gridContent.style.display = '';
             }
 
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // --- Recommendations Navigation ---
+    if (goToRecommendationsBtn) {
+        goToRecommendationsBtn.addEventListener('click', () => {
+            resultsSection.classList.remove('active');
+            resultsSection.classList.add('hidden');
+            recommendationsSection.classList.remove('hidden');
+            recommendationsSection.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    if (backToResultsBtn) {
+        backToResultsBtn.addEventListener('click', () => {
+            recommendationsSection.classList.remove('active');
+            recommendationsSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+            resultsSection.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }

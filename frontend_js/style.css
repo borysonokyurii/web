@@ -193,6 +193,65 @@ h3 {
     display: block;
 }
 
+/* --- Recommendations Section --- */
+.recommendations-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    perspective: 1000px;
+    /* For 3D effect if needed */
+}
+
+.recommendation-card {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy effect */
+    position: relative;
+    overflow: hidden;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(145deg, #2a2b35, #22232b);
+}
+
+.card-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    transition: transform 0.4s ease;
+}
+
+.recommendation-card:hover .card-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.recommendation-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.recommendation-card p {
+    color: #ccc;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Helper for hidden */
+.hidden {
+    display: none !important;
+}
+
 .section.hidden {
     display: none;
 }
@@ -306,14 +365,16 @@ h3 {
     border-color: #ccc;
 }
 
-#back-to-project {
+#back-to-project,
+#back-to-results {
     background-color: var(--primary-color);
     color: #000000;
     border: 1px solid var(--primary-color);
     font-weight: 700;
 }
 
-#back-to-project:hover {
+#back-to-project:hover,
+#back-to-results:hover {
     background-color: #ff3333;
     box-shadow: 0 0 10px var(--primary-color);
 }
