@@ -354,12 +354,69 @@ document.addEventListener('DOMContentLoaded', () => {
                 mapbox: {
                     style: "carto-positron",
                     center: { lat: -14.235, lon: -51.925 },
-                    zoom: 3
+                    zoom: 3,
                 },
                 margin: { l: 0, r: 0, t: 40, b: 0 }
             };
 
-            Plotly.newPlot(container, [trace], layout, { responsive: true });
+            const config = {
+                mapboxAccessToken: "open-street-map",
+                responsive: true,
+                scrollZoom: false, // Disable scroll zoom
+                displayModeBar: false // Optional: hide the toolbar to look more "static"
+            };
+
+            // To enforce minzoom with carto-positron in Plotly, we often need to rely on the fact 
+            // that 'layers' based maps or standard layout might not strictly support minzoom 
+            // without a mapbox token or specific config. 
+            // However, let's try injecting it into the layout.mapbox object first.
+            // If that fails, we might need a workaround.
+            // Actually, for 'carto-positron', it's a tile style. 
+            // Correct way for many plotly versions:
+            layout.mapbox.layers = [
+                {
+                    below: 'traces',
+                    sourcetype: "raster",
+                    source: [
+                        "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                    ]
+                }
+            ];
+            // But we were using style: "carto-positron" shorthand. 
+            // Let's stick to the simplest attempt first: adding minzoom to mapbox dict.
+            // Documentation says layout.mapbox.minzoom exists.
+
+            layout.mapbox.minzoom = 1.5; // Restrict zooming out too far
+
+            // Disable drag/pan in layout (for mapbox, it's often handled in layout.mapbox)
+            // layout.dragmode = false; // This works for cartesian, but for mapbox:
+            // layout.mapbox.dragmode = false; // Not a standard property in all versions.
+
+            // For Plotly Mapbox, interactivity is often controlled via config too or layout.
+            // But scrollZoom: false in config is the main one for "scrolls with mouse".
+            // To completely freeze it (no drag), we can try:
+            // layout.mapbox.pitch = 0;
+            // layout.mapbox.bearing = 0;
+            // And maybe:
+            // config.staticPlot = true; // This disables ALL interaction including tooltips.
+
+            // User said "fix it statically, it scrolls with mouse". 
+            // Primarily this means scrollZoom = false.
+            // If they want NO dragging, we can likely rely on scrollZoom: false first.
+            // But let's add dragmode: false to layout just in case it helps for some chart types, 
+            // though for mapbox it might be different.
+
+            Plotly.newPlot(container, [trace], layout, config).then(gd => {
+                // Specific disabling for mapbox if needed
+                if (gd._fullLayout.mapbox) {
+                    gd._fullLayout.mapbox._map.scrollZoom.disable();
+                    gd._fullLayout.mapbox._map.dragPan.disable();
+                    gd._fullLayout.mapbox._map.dragRotate.disable();
+                    gd._fullLayout.mapbox._map.touchZoomRotate.disable();
+                    gd._fullLayout.mapbox._map.doubleClickZoom.disable();
+                    gd._fullLayout.mapbox._map.boxZoom.disable();
+                }
+            });
 
         } catch (e) {
             console.error('Map rendering failed:', e);
