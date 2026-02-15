@@ -5,9 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebar-toggle');
+    const portfolioTitle = document.getElementById('portfolio-title-container'); // New
+    const portfolioSection = document.getElementById('portfolio-section');
     const projectSection = document.getElementById('project-section');
     const resultsSection = document.getElementById('results-section');
     const recommendationsSection = document.getElementById('recommendations-section'); // New
+    const projectLogisticsCard = document.getElementById('open-project-logistics'); // New
+    const backToPortfolioBtn = document.getElementById('back-to-portfolio'); // New
     const goToResultsBtn = document.getElementById('go-to-results');
     const backToProjectBtn = document.getElementById('back-to-project');
     const goToRecommendationsBtn = document.getElementById('go-to-recommendations'); // New
@@ -56,6 +60,29 @@ document.addEventListener('DOMContentLoaded', () => {
             sidebarToggle.textContent = '☰';
         }
     });
+
+    // --- Portfolio Navigation ---
+    if (projectLogisticsCard) {
+        projectLogisticsCard.addEventListener('click', () => {
+            portfolioTitle.classList.add('hidden'); // Hide Title
+            portfolioSection.classList.remove('active');
+            portfolioSection.classList.add('hidden');
+            projectSection.classList.remove('hidden');
+            projectSection.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    if (backToPortfolioBtn) {
+        backToPortfolioBtn.addEventListener('click', () => {
+            portfolioTitle.classList.remove('hidden'); // Show Title
+            projectSection.classList.remove('active');
+            projectSection.classList.add('hidden');
+            portfolioSection.classList.remove('hidden');
+            portfolioSection.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 
     // --- Navigation Logic ---
     goToResultsBtn.addEventListener('click', () => {

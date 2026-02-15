@@ -252,8 +252,88 @@ h3 {
     display: none !important;
 }
 
+/* --- Portfolio Section --- */
+.portfolio-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    margin-top: 1rem;
+}
+
+.portfolio-header p {
+    color: #888;
+    font-size: 1.2rem;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.project-card {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover:not(.disabled) {
+    transform: translateY(-10px);
+    border-color: var(--primary-color);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.project-image-placeholder {
+    height: 220px;
+    background: #1a1b23;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.project-info {
+    padding: 2rem;
+}
+
+.project-info h3 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    color: var(--text-color);
+}
+
+.project-info p {
+    color: #aaa;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+.project-card.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+.status-badge {
+    display: inline-block;
+    background: #444;
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+}
+
 .section.hidden {
-    display: none;
+    display: none !important;
 }
 
 @keyframes fadeIn {
@@ -366,7 +446,8 @@ h3 {
 }
 
 #back-to-project,
-#back-to-results {
+#back-to-results,
+#back-to-portfolio {
     background-color: var(--primary-color);
     color: #000000;
     border: 1px solid var(--primary-color);
@@ -374,7 +455,8 @@ h3 {
 }
 
 #back-to-project:hover,
-#back-to-results:hover {
+#back-to-results:hover,
+#back-to-portfolio:hover {
     background-color: #ff3333;
     box-shadow: 0 0 10px var(--primary-color);
 }

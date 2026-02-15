@@ -33,10 +33,49 @@
         <!-- Main Content -->
         <main class="main-content">
             <button id="sidebar-toggle" class="btn-toggle" aria-label="Toggle Sidebar">☰</button>
-            <h1>Logistics and Customer Satisfaction Analysis Brazilian E-Commerce</h1>
+            <!-- Global Header for Portfolio (Optional, or just use H1 inside sections) -->
+            <div id="portfolio-title-container" class="active">
+                <h1 style="text-align: center; margin-top: 3rem;">Data Analytics Portfolio</h1>
+            </div>
 
-            <!-- Project Section -->
-            <div id="project-section" class="section active">
+            <!-- Portfolio Home Page -->
+            <div id="portfolio-section" class="section active">
+                <div class="portfolio-header">
+                    <h2>Selected Data Projects</h2>
+                    <p>A collection of end-to-end data analytics and engineering solutions.</p>
+                </div>
+
+                <div class="portfolio-grid">
+                    <!-- Project 1: Logistics -->
+                    <div class="project-card" id="open-project-logistics">
+                        <div class="project-image-placeholder">🚚</div>
+                        <div class="project-info">
+                            <h3>Logistics & Customer Satisfaction</h3>
+                            <p>Olist E-Commerce Analysis: ETL, SQL Metrics, and Interactive Dashboards.</p>
+                            <span class="btn-primary"
+                                style="padding: 0.5rem 1rem; display: inline-block; margin-top: 1rem;">View Project
+                                &rarr;</span>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder for Project 2 -->
+                    <div class="project-card disabled">
+                        <div class="project-image-placeholder">📊</div>
+                        <div class="project-info">
+                            <h3>Sales Forecasting</h3>
+                            <p>Coming Soon: Time-series analysis of retail transactions.</p>
+                            <span class="status-badge">Planned</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Section (Now Project 1) -->
+            <div id="project-section" class="section hidden">
+                <h1 style="font-size: 2rem; margin-top: 1rem; text-align: left;">Logistics and Customer Satisfaction
+                    Analysis: Olist</h1>
+                <button id="back-to-portfolio" class="btn-secondary" style="margin-bottom: 2rem;">&larr; Back to
+                    Projects</button>
                 <!-- Moved Button to Top as per Sketch -->
                 <div class="actions" style="margin-bottom: 2rem; text-align: center;">
                     <button id="go-to-results" class="btn-primary btn-large"

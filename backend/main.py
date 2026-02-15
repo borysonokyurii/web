@@ -15,8 +15,6 @@ load_dotenv()
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-# DATABASE_URL setup removed as it is handled in database.py
-
 
 def get_query():
     return text("""
@@ -33,7 +31,6 @@ def get_query():
     """)
 
 def get_second_query():
-    # optimized query to reduce load
     return text("""WITH cte AS (
     SELECT 
     s.seller_city, s.seller_state,
@@ -60,7 +57,6 @@ def get_second_query():
 async def lifespan(app:FastAPI):
     if engine:
         try:
-            # Set a timeout for the connection check to avoid hanging
             with engine.connect() as con:
                 con.execute(text("SELECT 1"))
             print("Database connected successfully")
@@ -69,9 +65,7 @@ async def lifespan(app:FastAPI):
             print("зєднання закрито")
         except Exception as e:
             print(f"Database connection failed (non-fatal): {e}")
-            # Yield anyway so the app starts and binding occurs
             yield
-            # No engine to dispose if connection failed
     else:
         print("Engine not initialized")
         yield
@@ -85,10 +79,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
 app.mount("/static", StaticFiles(directory="frontend_js"), name="static")
 
-# Serve index.html at root
 @app.get("/")
 async def read_index():
     return FileResponse('frontend_js/index.html')
