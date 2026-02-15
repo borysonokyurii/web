@@ -11,7 +11,12 @@ from backend.database import get_db, engine
 
 load_dotenv()
 
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
 # DATABASE_URL setup removed as it is handled in database.py
+
 
 def get_query():
     return text("""
@@ -55,14 +60,18 @@ def get_second_query():
 async def lifespan(app:FastAPI):
     if engine:
         try:
+            # Set a timeout for the connection check to avoid hanging
             with engine.connect() as con:
                 con.execute(text("SELECT 1"))
+            print("Database connected successfully")
             yield 
             engine.dispose() 
             print("зєднання закрито")
         except Exception as e:
-            print(f"Database connection failed: {e}")
+            print(f"Database connection failed (non-fatal): {e}")
+            # Yield anyway so the app starts and binding occurs
             yield
+            # No engine to dispose if connection failed
     else:
         print("Engine not initialized")
         yield
@@ -75,6 +84,26 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="frontend_js"), name="static")
+
+# Serve index.html at root
+@app.get("/")
+async def read_index():
+    return FileResponse('frontend_js/index.html')
+
+@app.get("/style.css")
+async def get_css():
+    return FileResponse('frontend_js/style.css')
+
+@app.get("/app.js")
+async def get_js():
+    return FileResponse('frontend_js/app.js')
+
+@app.get("/brazil_geo.json")
+async def get_geojson():
+    return FileResponse('frontend_js/brazil_geo.json')
 
 @app.get("/api/rating")
 def get_summary(db: Connection = Depends(get_db)):

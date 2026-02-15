@@ -4,12 +4,7 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    API_URL="http://localhost:8000" \
-    STREAMLIT_SERVER_PORT=8501 \
-    STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
-    STREAMLIT_SERVER_HEADLESS=true \
-    STREAMLIT_SERVER_ENABLE_CORS=false \
-    STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=false
+    API_URL="http://localhost:8000"
 
 # Install dependencies
 COPY requirements.txt .
@@ -17,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy code
 COPY backend ./backend
-COPY frontend ./frontend
+COPY frontend_js ./frontend_js
 COPY start.sh .
 
 # Make start script executable

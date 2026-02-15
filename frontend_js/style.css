@@ -1,0 +1,512 @@
+:root {
+    --bg-color: #0e1117;
+    --text-color: #fafafa;
+    --primary-color: #FF4B4B;
+    --secondary-bg: #262730;
+    --sidebar-bg: #262730;
+    --border-color: #41424b;
+    --font-family: 'Roboto', sans-serif;
+    --max-width: 1800px;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    scroll-behavior: smooth;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Layout */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    flex-shrink: 0;
+    transition: width 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+
+    /* Sticky Sidebar for Desktop */
+    position: sticky;
+    top: 0;
+    height: 75vh;
+    overflow: hidden;
+    /* Stop main scroll */
+}
+
+.sidebar-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: thin;
+    /* Nice scrollbar for Firefox */
+}
+
+/* Custom scrollbar for Webkit */
+.sidebar-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+.sidebar-footer {
+    flex-shrink: 0;
+    background-color: var(--sidebar-bg);
+    z-index: 10;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    /* Optional separation */
+}
+
+.sidebar.collapsed {
+    width: 0;
+    padding: 2rem 0;
+    border: none;
+}
+
+/* Toggle Button */
+.btn-toggle {
+    position: fixed;
+    /* Changed from absolute to fixed */
+    top: 1rem;
+    left: 1.5rem;
+    /* Moved right as requested */
+    z-index: 1001;
+    /* Ensure above sidebar if needed, though sidebar pushes content */
+    background: var(--sidebar-bg);
+    /* Add background for visibility over any content */
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.2rem 0.6rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.2s, left 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-toggle:hover {
+    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+
+}
+
+/* When sidebar is visible, button should move or stay? 
+   If fixed, it stays at top-left of viewport.
+   If sidebar is 300px wide, and we want button inside content area:
+   Content area starts at 300px.
+   So button should be at left: 300px + 1rem.
+*/
+body:has(.sidebar:not(.collapsed)) .btn-toggle {
+    left: calc(300px + 1rem);
+}
+
+/* Fallback if :has not supported or for simpler logic: 
+   Actually, the previous absolute positioning inside main-content (which flows) was fine for X axis,
+   but we want it fixed on Y axis (scroll).
+   
+   Let's try absolute inside a fixed header? No, just fixed.
+*/
+
+.sidebar-content {
+    flex-grow: 1;
+    min-width: 300px;
+    min-height: 0;
+    /* Crucial for nested scrolling */
+    /* Prevent content squishing during transition */
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    min-width: 300px;
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 1rem 0;
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 2rem 4rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    overflow-x: hidden;
+    position: relative;
+    transition: padding 0.3s ease;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    margin-top: 3rem;
+    /* Increased space for fixed toggle button */
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    margin-top: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+/* Sections */
+.section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.section.active {
+    display: block;
+}
+
+.section.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading Overlay */
+/* Loading Overlay (now Inline) */
+.loading-overlay {
+    /* Removed fixed positioning to make it inline if needed, 
+       but user said "shows this line with loading", implying it replaces content */
+    /* Let's keep it as flexible, but if we append it to a container, it fills that container */
+    position: relative;
+    /* Changed from fixed */
+    width: 100%;
+    min-height: 400px;
+    /* Ensure visible space */
+    background: transparent;
+    /* Transparent or dark as requested? User said "black background". 
+       If inline, maybe just dark box? Or distinct section? 
+       "Make black background and white text" - applied to container */
+    background-color: #0e1117;
+    /* Match theme or specific black? Let's go black per request */
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Actions */
+.btn-large {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.5rem;
+}
+
+/* Grid Layout for Project Tab */
+.two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+/* Buttons */
+.btn-primary {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #000000;
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #ff3333;
+    /* Slightly brighter/different red on hover */
+    color: #000000;
+    text-decoration: none;
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    border-color: #ccc;
+}
+
+#back-to-project {
+    background-color: var(--primary-color);
+    color: #000000;
+    border: 1px solid var(--primary-color);
+    font-weight: 700;
+}
+
+#back-to-project:hover {
+    background-color: #ff3333;
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+/* Charts */
+.chart-container {
+    width: 100%;
+    height: 500px;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* API Status Colors */
+.status-green {
+    color: green;
+}
+
+.status-orange {
+    color: orange;
+}
+
+.status-red {
+    color: red;
+}
+
+/* Responsive adjustments */
+/* Responsive adjustments */
+
+
+/* Large Resolution Adaptation */
+/* Removed 2-column grid as per user request to keep "normal" flow */
+@media (min-width: 1400px) {
+
+    /* Increase font size for readability on large screens */
+    html {
+        font-size: 24px;
+    }
+
+    :root {
+        --max-width: 1400px;
+    }
+
+    /* Widen sidebar to accommodate larger text */
+    .sidebar {
+        width: 400px;
+        height: 100dvh;
+        /* Use dynamic viewport height */
+    }
+
+    .main-content {
+        max-width: var(--max-width);
+        margin: 0 auto;
+    }
+}
+
+/* Extra Large Screens */
+@media (min-width: 1800px) {
+    html {
+        font-size: 30px;
+    }
+
+    :root {
+        --max-width: 1800px;
+    }
+
+    /* Even wider sidebar for massive text */
+    .sidebar {
+        width: 500px;
+    }
+}
+
+/* Tablet & Smaller Desktop */
+@media (max-width: 1024px) {
+
+    /* Tablet: Sidebar stays visible but maybe narrower? */
+    .main-content {
+        padding: 2rem;
+        width: 100%;
+        /* Ensure content takes available space */
+        box-sizing: border-box;
+        /* Include padding in width */
+    }
+
+    /* Ensure charts don't overflow */
+    .chart-container {
+        width: 100%;
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Mobile specific adjustments */
+    .app-container {
+        flex-direction: column;
+        overflow-x: hidden;
+        /* Prevent horizontal scroll */
+    }
+
+    /* Fixed Sidebar (Off-canvas) */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1050;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        border-right: 1px solid var(--border-color);
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        background-color: var(--sidebar-bg);
+        /* Ensure opacity */
+    }
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    /* Toggle Button Visibility */
+    .btn-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        top: 10px;
+        left: 10px;
+        background: white;
+        border: 1px solid #ccc;
+    }
+
+    /* When sidebar is open on mobile, ensure button or toggle logic works */
+    body:has(.sidebar.mobile-open) .btn-toggle {
+        z-index: 1060;
+        left: 290px;
+        transition: left 0.3s ease;
+    }
+
+    .main-content {
+        padding: 4rem 1rem 2rem 1rem;
+        width: 100%;
+        /* Safer than 100vw */
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Reset font size for mobile */
+    html {
+        font-size: 16px;
+    }
+
+    /* Stack grid elements on mobile */
+    .two-column-grid,
+    .results-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Ensure images/charts scale down */
+    img,
+    svg,
+    canvas,
+    .plotly-graph-div {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        word-wrap: break-word;
+        /* Prevent long words breaking layout */
+    }
+}
+
+/* Backdrop for mobile sidebar */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1040;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.active {
+    display: block;
+    opacity: 1;
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Analysis | Olist</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar collapsed" id="sidebar">
+            <div class="sidebar-content">
+                <h2>Contacts</h2>
+                <div class="divider"></div>
+                <p><strong>Yurii Borysonok</strong></p>
+                <p><a href="https://www.linkedin.com/in/yurii-borysonok" target="_blank">LinkedIn</a></p>
+                <p><strong>Email:</strong> borysonokyurii@gmail.com</p>
+                <p><strong>City:</strong> Lviv, Ukraine</p>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="divider"></div>
+                <p id="api-status"><strong>Status:</strong> <span class="status-indicator">Checking...</span></p>
+                <button id="refresh-btn" class="btn-secondary">↻ Check Status</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button id="sidebar-toggle" class="btn-toggle" aria-label="Toggle Sidebar">☰</button>
+            <h1>Logistics and Customer Satisfaction Analysis Brazilian E-Commerce</h1>
+
+            <!-- Project Section -->
+            <div id="project-section" class="section active">
+                <!-- Moved Button to Top as per Sketch -->
+                <div class="actions" style="margin-bottom: 2rem; text-align: center;">
+                    <button id="go-to-results" class="btn-primary btn-large"
+                        style="width: 100%; max-width: 600px; padding: 1.5rem; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px;">START</button>
+                </div>
+
+                <div class="two-column-grid">
+                    <div class="column">
+                        <h2>About the project</h2>
+                        <p>This analysis identifies critical factors that affect delivery quality and customer
+                            experience.</p>
+                        <p>I used this dataset to demonstrate the full data lifecycle: from ETL processes to building
+                            business hypotheses.</p>
+
+                        <h3>Main goal:</h3>
+                        <p>Find out why orders are late and how this translates into reputational damage for the
+                            marketplace.</p>
+
+                        <h2>Stack</h2>
+                        <ul>
+                            <li><strong>SQL (PostgreSQL):</strong> Complex queries, window functions, CTE for
+                                calculating Delay Rate</li>
+                            <li><strong>Python:</strong> Preprocessing data, removing duplicates, and converting types
+                            </li>
+                            <li><strong>Tableau:</strong> Correlation analysis and visualization of insights</li>
+                            <li><strong>SQLAlchemy:</strong> Integrating Python with the database to automate updates
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h2>Process</h2>
+                        <h3>1. Data preparation and transformation</h3>
+                        <p>At the initial stage, using <strong>Python</strong> and <strong>SQLAlchemy</strong>, the
+                            following was performed:</p>
+                        <ul>
+                            <li>Conversion of text date fields to <code>TIMESTAMP</code> format for correct calculations
+                            </li>
+                            <li>Cleaning duplicates and validating data</li>
+                            <li>Loading cleaned data into PostgreSQL</li>
+                        </ul>
+
+                        <h3>2. Key SQL metrics</h3>
+                        <p>To analyze logistics, queries were developed to calculate:</p>
+                        <ul>
+                            <li><strong>Delay Rate:</strong> Percentage of orders delivered later than the promised
+                                delivery date</li>
+                            <li><strong>Average Review Score:</strong> Comparison of ratings for on-time and late
+                                deliveries</li>
+                            <li><strong>Weighted Delivery Analysis:</strong> The impact of product weight on the
+                                likelihood of delay</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Section -->
+            <div id="loading-section" class="loading-overlay hidden">
+                <div class="spinner"></div>
+                <h2>Generating...</h2>
+            </div>
+
+            <!-- Results Section (Hidden initially) -->
+            <div id="results-section" class="section hidden">
+                <button id="back-to-project" class="btn-secondary" style="margin-bottom: 1rem;">&larr; Back to
+                    Project</button>
+                <h2>Results</h2>
+
+                <div class="results-grid">
+                    <!-- Section 1 -->
+                    <section>
+                        <h3>1. Impact of delays on customer experience</h3>
+                        <p>The analysis showed a high correlation between on-time delivery and user ratings:</p>
+                        <ul>
+                            <li><strong>On-time delivery:</strong> Average rating — <strong>4.29</strong></li>
+                            <li><strong>Delays:</strong> Average rating drops to <strong>2.57</strong></li>
+                            <li><strong>Conclusion:</strong> Late delivery is the main driver of negative reviews</li>
+                        </ul>
+                        <div id="rating-chart" class="chart-container"></div>
+                    </section>
+
+                    <!-- Section 2 -->
+                    <section>
+                        <h3>2. Correlation between product weight and logistics speed</h3>
+                        <p>I discovered a certain correlation:</p>
+                        <ul>
+                            <li>The higher the average weight of goods in the seller's city, the higher the
+                                <strong>Delay
+                                    Rate</strong>
+                            </li>
+                            <li>Goods weighing more than <strong>10 kg</strong> have a 2-3 times higher risk of delay
+                                compared to light parcels</li>
+                            <li>The P-value of this data is <strong>0.03</strong>, which indicates its significance</li>
+                        </ul>
+                        <div id="correlation-chart" class="chart-container"></div>
+
+                        <details>
+                            <summary>See details (Data Table)</summary>
+                            <div id="data-table-container"></div>
+                        </details>
+                    </section>
+
+                    <!-- Section 3 -->
+                    <section>
+                        <h3>3. Geographical anomalies</h3>
+                        <p>The cities with the highest levels of delays were identified. For example, the city of
+                            <strong>Sombrio</strong> shows a high level of delays, which directly correlates with the
+                            high
+                            average weight of goods in this region <strong>22 kg</strong>
+                        </p>
+                        <div id="map-chart" class="chart-container"></div>
+                    </section>
+
+                    <div class="actions">
+                        <a href="https://bit.ly/3Mx0e2Z" target="_blank" class="btn-primary">Graphic in Tableau</a>
+                    </div>
+
+                    <!-- Section 4 -->
+                    <section>
+                        <h3>Recommendations</h3>
+                        <ol>
+                            <li><strong>Dynamic delivery times:</strong> Implement an algorithm that automatically adds
+                                +1-2
+                                days to the expected delivery date for goods weighing more than <strong>10 kg</strong>
+                            </li>
+                            <li><strong>Optimize partnerships:</strong> Review logistics partners in cities with a
+                                Delay_Rate > 15% to identify the causes of delays</li>
+                            <li><strong>Manage expectations:</strong> Warn customers about possible delays for large
+                                items
+                                at the checkout stage</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
